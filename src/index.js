@@ -51,34 +51,7 @@ class Board extends React.Component {
         );
     }
 }
-/*
-history = [
-    // before first move
-    {
-        squares: [
-            null, null, null,
-            null, null, null,
-            null, null, null,
-        ]
-    },
-    // After first move
-    {
-        squares: [
-            null, null, null,
-            null, 'X', null,
-            null, null, null,
-        ]
-    },
-    // After second move
-    {
-        squares: [
-            null, null, null,
-            null, 'X', null,
-            null, null, 'O',
-        ]
-    },
-]
-*/
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -101,7 +74,8 @@ class Game extends React.Component {
         squares[i] = this.state.xIsNext ? 'X': 'O';
         this.setState({
             history: history.concat([{
-                squares: squares
+                squares: squares,
+                currentMoveSquare: i
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -121,8 +95,11 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
+            const currentMoveSquare = step.currentMoveSquare;
+            const col = 1 + currentMoveSquare % 3;
+            const row = 1 + Math.floor(currentMoveSquare/3);
             const desc = move?
-            'Go to move #' + move :
+            `Go to move # ${move} (${col}, ${row})`:
             'Go to game start';
             return (
             <li key={move}>
